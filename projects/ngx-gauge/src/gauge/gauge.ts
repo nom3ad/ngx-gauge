@@ -26,7 +26,7 @@ const DEFAULTS = {
     MAX: 100,
     TYPE: 'arch',
     THICK: 4,
-    FOREGROUND_COLOR: 'rgba(0, 150, 136, 1)',
+    FOREGROUND_COLOR: '#009688',
     BACKGROUND_COLOR: 'rgba(0, 0, 0, 0.1)',
     CAP: 'butt',
     SIZE: 200
@@ -35,6 +35,9 @@ const DEFAULTS = {
 export type NgxGaugeType = 'full' | 'arch' | 'semi';
 export type NgxGaugeCap = 'round' | 'butt';
 
+function selectColor(i) {
+    return [ '#009688' , '#dbf7f7'][i];
+}
 @Component({
     selector: 'ngx-gauge',
     templateUrl: 'gauge.html',
@@ -56,10 +59,10 @@ export class NgxGauge implements AfterViewInit, OnChanges, OnDestroy {
 
     @ViewChild('canvas', { static: true }) _canvas: ElementRef;
 
-    @ContentChild(NgxGaugeLabel, {static: false}) _labelChild: NgxGaugeLabel;
-    @ContentChild(NgxGaugePrepend, {static: false}) _prependChild: NgxGaugePrepend;
-    @ContentChild(NgxGaugeAppend, {static: false}) _appendChild: NgxGaugeAppend;
-    @ContentChild(NgxGaugeValue, {static: false}) _valueDisplayChild: NgxGaugeValue;
+    @ContentChild(NgxGaugeLabel, { static: false }) _labelChild: NgxGaugeLabel;
+    @ContentChild(NgxGaugePrepend, { static: false }) _prependChild: NgxGaugePrepend;
+    @ContentChild(NgxGaugeAppend, { static: false }) _appendChild: NgxGaugeAppend;
+    @ContentChild(NgxGaugeValue, { static: false }) _valueDisplayChild: NgxGaugeValue;
 
     private _size: number = DEFAULTS.SIZE;
     private _min: number = DEFAULTS.MIN;
@@ -116,14 +119,27 @@ export class NgxGauge implements AfterViewInit, OnChanges, OnDestroy {
     @Input() thresholds: Object = Object.create(null);
 
     private _value: number = 0;
+    private _steps?: { ratio: number, color: string }[];
 
     @Input()
     get value() { return this._value; }
-    set value(val: number) {
-        this._value = coerceNumberProperty(val);
+    set value(val: any) {
+        if (Array.isArray(val)) {
+            if( typeof(val[0]) === 'object' ){
+                this._value = coerceNumberProperty(val.reduce((a, b) => a + b.step, 0));
+                this._steps = val.map((s, i) => ({ ratio: s.step / this._value, color: s.color || selectColor(i) }));
+            } else {
+                this._value = coerceNumberProperty(val.reduce((a, b) => a + b, 0));
+                this._steps = val.map((s, i) => ({ ratio: s / this._value, color: selectColor(i) }));
+            }
+        } else {
+            this._value = coerceNumberProperty(val);
+        }
     }
 
     @Input() duration: number = 1200;
+
+
 
     constructor(private _elementRef: ElementRef, private _renderer: Renderer) { }
 
@@ -139,7 +155,7 @@ export class NgxGauge implements AfterViewInit, OnChanges, OnDestroy {
                     ov = changes['value'].previousValue;
                 }
                 this._update(nv, ov);
-            } 
+            }
             if (isCanvasPropertyChanged) {
                 this._destroy();
                 this._init();
@@ -191,11 +207,23 @@ export class NgxGauge implements AfterViewInit, OnChanges, OnDestroy {
             this._context.strokeStyle = this.backgroundColor;
             this._context.arc(center.x, center.y, radius, middle, tail, false);
             this._context.stroke();
-
-            this._context.beginPath();
-            this._context.strokeStyle = color;
-            this._context.arc(center.x, center.y, radius, start, middle, false);
-            this._context.stroke();
+            if (!this._steps) {
+                this._context.beginPath();
+                this._context.strokeStyle = color;
+                this._context.arc(center.x, center.y, radius, start, middle, false);
+                this._context.stroke();
+            } else {
+                const archlen = middle - start
+                let stepstart = start;
+                for (const { color, ratio } of this._steps) {
+                    const stepend = stepstart + archlen * ratio;
+                    this._context.beginPath();
+                    this._context.strokeStyle = color;
+                    this._context.arc(center.x, center.y, radius, stepstart, stepend, false);
+                    this._context.stroke();
+                    stepstart = stepend;
+                }
+            }
         }
     }
 
