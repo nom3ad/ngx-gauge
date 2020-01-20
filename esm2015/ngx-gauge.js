@@ -1,0 +1,11 @@
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+/**
+ * Generated bundle index. Do not edit.
+ */
+export { NgxGaugeModule } from './public_api';
+export { NgxGauge as ɵa } from './gauge/gauge';
+export { NgxGaugeAppend as ɵb, NgxGaugeLabel as ɵe, NgxGaugePrepend as ɵc, NgxGaugeValue as ɵd } from './gauge/gauge-directives';
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoibmd4LWdhdWdlLmpzIiwic291cmNlUm9vdCI6Im5nOi8vbmd4LWdhdWdlLyIsInNvdXJjZXMiOlsibmd4LWdhdWdlLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7Ozs7Ozs7QUFJQSwrQkFBYyxjQUFjLENBQUM7QUFFN0IsT0FBTyxFQUFDLFFBQVEsSUFBSSxFQUFFLEVBQUMsTUFBTSxlQUFlLENBQUM7QUFDN0MsT0FBTyxFQUFDLGNBQWMsSUFBSSxFQUFFLEVBQUMsYUFBYSxJQUFJLEVBQUUsRUFBQyxlQUFlLElBQUksRUFBRSxFQUFDLGFBQWEsSUFBSSxFQUFFLEVBQUMsTUFBTSwwQkFBMEIsQ0FBQyIsInNvdXJjZXNDb250ZW50IjpbIi8qKlxuICogR2VuZXJhdGVkIGJ1bmRsZSBpbmRleC4gRG8gbm90IGVkaXQuXG4gKi9cblxuZXhwb3J0ICogZnJvbSAnLi9wdWJsaWNfYXBpJztcblxuZXhwb3J0IHtOZ3hHYXVnZSBhcyDJtWF9IGZyb20gJy4vZ2F1Z2UvZ2F1Z2UnO1xuZXhwb3J0IHtOZ3hHYXVnZUFwcGVuZCBhcyDJtWIsTmd4R2F1Z2VMYWJlbCBhcyDJtWUsTmd4R2F1Z2VQcmVwZW5kIGFzIMm1YyxOZ3hHYXVnZVZhbHVlIGFzIMm1ZH0gZnJvbSAnLi9nYXVnZS9nYXVnZS1kaXJlY3RpdmVzJzsiXX0=
